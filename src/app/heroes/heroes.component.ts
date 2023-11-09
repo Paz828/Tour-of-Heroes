@@ -1,22 +1,23 @@
-import { Component } from '@angular/core';
-import { NgFor, NgIf, UpperCasePipe } from '@angular/common';
-import { Hero } from '../hero';
+import { Component, OnInit } from '@angular/core';
+
+import { MessageService } from '../message.service';
 import { HeroService } from '../hero.service';
-import { FormsModule } from '@angular/forms';
-import { HeroDetailComponent } from '../hero-detail/hero-detail.component';
+import { Hero } from '../hero';
 
 @Component({
-  standalone: true,
   selector: 'app-heroes',
   templateUrl: './heroes.component.html',
   styleUrls: ['./heroes.component.css'],
-  imports: [NgFor, FormsModule, NgIf, UpperCasePipe, HeroDetailComponent],
 })
-export class HeroesComponent {
-  heroes: Hero[] = [];
+export class HeroesComponent implements OnInit {
   selectedHero?: Hero;
 
-  constructor(private heroService: HeroService) {}
+  heroes: Hero[] = [];
+
+  constructor(
+    private heroService: HeroService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit(): void {
     this.getHeroes();
@@ -24,6 +25,7 @@ export class HeroesComponent {
 
   onSelect(hero: Hero): void {
     this.selectedHero = hero;
+    this.messageService.add(`HeroesComponent: Selected hero id=${hero.id}`);
   }
 
   getHeroes(): void {
